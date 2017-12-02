@@ -12,7 +12,7 @@ var zapLogInst *zap.Logger
 
 func zapInstance() *zap.Logger {
 	onceSync.Do(func() {
-		logger, _ := zap.NewProduction()
+		logger, _ := zap.NewProduction(zap.AddCaller(), zap.AddCallerSkip(2))
 		defer logger.Sync()
 		zapLogInst = logger
 	})

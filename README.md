@@ -26,4 +26,4 @@ dalog.WithContext(dalog.WithID("A123"), dalog.WithHostname()).Infof("%s %s", "he
 ```
 
 ## Open items
-* zap logger prints dalog as the caller, should report the true caller, not the abstraction layer
+* Make loggers more configurable
