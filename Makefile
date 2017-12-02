@@ -43,7 +43,6 @@ vet:
 .PHONY: test
 test:
 	@echo "Running: $@"
-
 	go test ./... -v
 
 
