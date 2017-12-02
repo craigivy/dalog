@@ -12,7 +12,7 @@ os.Setenv("DALOG", "ZAP")
 dalog.WithContext(dalog.WithID("A123"), dalog.WithHostname()).Infof("%s %s", "hello", "world")
 ```
 ```json
-{"level":"info","ts":1512200608.536454,"caller":"dalog/zapLog.go:28","msg":"hello world","ID":"A123","Hostname":"MacBook-Pro.local"}
+{"level":"info","ts":1512254914.971346,"caller":"dalog/log_test.go:11","msg":"hello world","ID":"A123","Hostname":"MacBook-Pro.local"}
 ```
 
 ### String via go log
