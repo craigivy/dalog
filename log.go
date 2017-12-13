@@ -2,6 +2,7 @@ package dalog
 
 import (
 	"os"
+	"strings"
 )
 
 // Context to associate to a logger
@@ -28,13 +29,19 @@ type Log interface {
 	Infof(format string, a ...interface{})
 	Warnf(format string, a ...interface{})
 	Errorf(format string, a ...interface{})
+	Debugf(format string, a ...interface{})
 }
 
 // WithContext creates a logger with a context
 func WithContext(contexts ...Context) Log {
-	if "ZAP" == os.Getenv("DALOG") {
-		return zapLog{contexts: contexts}
+	debug := false
+	if "TRUE" == strings.ToUpper(os.Getenv("DALOG_DEBUG")) {
+		debug = true
+	}
+
+	if "ZAP" == os.Getenv("DALOG_LOGGER") {
+		return zapLog{contexts: contexts, debugMode: debug}
 
 	}
-	return goLog{contexts: contexts}
+	return goLog{contexts: contexts, debugMode: debug}
 }

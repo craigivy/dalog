@@ -6,7 +6,18 @@ import (
 )
 
 type goLog struct {
-	contexts []Context
+	contexts  []Context
+	debugMode bool
+}
+
+func (golog goLog) Debugf(format string, a ...interface{}) {
+	if !golog.debugMode {
+		return
+	}
+	msg := fmt.Sprintf(format, a...)
+	msg = appendContexts(msg, golog.contexts)
+	msg = prependLevel("DEBUG", msg)
+	log.Println(msg)
 }
 
 func (golog goLog) Infof(format string, a ...interface{}) {
