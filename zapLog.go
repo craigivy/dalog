@@ -31,6 +31,29 @@ type zapLog struct {
 	debugMode bool
 }
 
+func (zl zapLog) Debug(a ...interface{}) {
+	if !zl.debugMode {
+		return
+	}
+	msg := fmt.Sprint(a...)
+	zapInstance(zl.debugMode).Debug(msg, convert(zl.contexts)...)
+}
+
+func (zl zapLog) Info(a ...interface{}) {
+	msg := fmt.Sprint(a...)
+	zapInstance(zl.debugMode).Info(msg, convert(zl.contexts)...)
+}
+
+func (zl zapLog) Warn(a ...interface{}) {
+	msg := fmt.Sprint(a...)
+	zapInstance(zl.debugMode).Warn(msg, convert(zl.contexts)...)
+}
+
+func (zl zapLog) Error(a ...interface{}) {
+	msg := fmt.Sprint(a...)
+	zapInstance(zl.debugMode).Error(msg, convert(zl.contexts)...)
+}
+
 func (zl zapLog) Debugf(format string, a ...interface{}) {
 	if !zl.debugMode {
 		return
@@ -52,6 +75,13 @@ func (zl zapLog) Warnf(format string, a ...interface{}) {
 func (zl zapLog) Errorf(format string, a ...interface{}) {
 	msg := fmt.Sprintf(format, a...)
 	zapInstance(zl.debugMode).Error(msg, convert(zl.contexts)...)
+}
+
+// Return a new logger with the combined contexts of the old logger and the
+// provided contexts.
+func (zl zapLog) WithContext(contexts ...Context) Log {
+	zl.contexts = append(zl.contexts, contexts...)
+	return zl
 }
 
 func convert(contexts []Context) []zapcore.Field {
