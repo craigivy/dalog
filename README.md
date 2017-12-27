@@ -2,8 +2,8 @@
 Logger abstraction allowing JSON via Zap logger and string via Go's logger.  Also supports a key value context.
 
 ## Options
-DALOG_DEBUG=[TRUE|FALSE]
-DALOG_LOGGER=[ZAP|GO]
+* DALOG_DEBUG=[TRUE|FALSE]
+* DALOG_LOGGER=[ZAP|GO]
 
 ## See it in action
 Running ```make``` will compile, lint, vet and run tests
