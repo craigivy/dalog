@@ -1,6 +1,7 @@
 package dalog
 
 import (
+	"fmt"
 	"os"
 	"strings"
 )
@@ -28,11 +29,10 @@ func WithHostname() Context {
 type Log interface {
 	Info(a ...interface{})
 	Warn(a ...interface{})
-	Error(a ...interface{})
+	Error(err error)
 	Debug(a ...interface{})
 	Infof(format string, a ...interface{})
 	Warnf(format string, a ...interface{})
-	Errorf(format string, a ...interface{})
 	Debugf(format string, a ...interface{})
 	WithContext(contexts ...Context) Log
 }
@@ -44,10 +44,15 @@ func NoContext() Log {
 		debug = true
 	}
 
-	if "ZAP" == os.Getenv("DALOG_LOGGER") {
-		return zapLog{contexts: []Context{}, debugMode: debug}
+	includeStack := false
+	if "TRUE" == strings.ToUpper(os.Getenv("DALOG_STACK")) {
+		includeStack = true
 	}
-	return goLog{contexts: []Context{}, debugMode: debug}
+
+	if "ZAP" == os.Getenv("DALOG_LOGGER") {
+		return zapLog{contexts: []Context{}, debugMode: debug, includeStack: includeStack}
+	}
+	return goLog{contexts: []Context{}, debugMode: debug, includeStack: includeStack}
 }
 
 // WithContext creates a logger with a context
@@ -55,4 +60,10 @@ func WithContext(contexts ...Context) Log {
 	logger := NoContext()
 	logger.WithContext(contexts...)
 	return logger
+}
+
+// containsStack returns if the error contains a stack
+func containsStack(err error) bool {
+	// hardly ideal, no better ideas...
+	return strings.Contains(fmt.Sprintf("%+v", err), "\n\t")
 }
