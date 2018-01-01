@@ -58,7 +58,7 @@ func TestStack(t *testing.T) {
 	os.Setenv("DALOG_LOGGER", "ZAP")
 	os.Setenv("DALOG_STACK", "TRUE")
 
-	e := errors.New("this is an error")
+	e := errors.New("This is an error using pkg error")
 	ens := goerr.New("no stack")
 	//fmt.Printf("error: %+v\n", c)
 	dalog.NoContext().Error(e)
