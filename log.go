@@ -74,5 +74,4 @@ func stackString(err error) (string, bool) {
 	}
 	st := cause.StackTrace()
 	return fmt.Sprintf("%+v", st[:]), ok
-
 }
