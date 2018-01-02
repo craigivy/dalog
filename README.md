@@ -39,13 +39,13 @@ Stack traces are supported using [pkg errors](https://github.com/pkg/errors) and
 ```
 ### JSON output
 ```json
-{"level":"error","ts":1514826488.172864,"msg":"This is an error using pkg error","stack":"This is an error using pkg error\ngithub.com/craigivy/dalog_test.TestStack\n\t/Users/civerson/dev/go/src/github.com/craigivy/dalog/log_test.go:61\ntesting.tRunner\n\t/usr/local/Cellar/go/1.9.2/libexec/src/testing/testing.go:746\nruntime.goexit\n\t/usr/local/Cellar/go/1.9.2/libexec/src/runtime/asm_amd64.s:2337"}
+{"level":"error","ts":1514921204.09196,"msg":"This is an error using pkg error","stack":"\ngithub.com/craigivy/dalog_test.TestStack\n\t/Users/civerson/dev/go/src/github.com/craigivy/dalog/log_test.go:61\ntesting.tRunner\n\t/usr/local/Cellar/go/1.9.2/libexec/src/testing/testing.go:746\nruntime.goexit\n\t/usr/local/Cellar/go/1.9.2/libexec/src/runtime/asm_amd64.s:2337"}
 ```
 
 
 ### Standard output
 ```
-2018/01/01 10:08:08 ERROR This is an error using pkg error, stack=This is an error using pkg error
+2018/01/02 12:26:44 ERROR This is an error using pkg error, stack=
 github.com/craigivy/dalog_test.TestStack
         /Users/civerson/dev/go/src/github.com/craigivy/dalog/log_test.go:61
 testing.tRunner

@@ -56,10 +56,12 @@ func (zl zapLog) Warn(a ...interface{}) {
 
 func (zl zapLog) Error(err error) {
 	fields := convert(zl.contexts)
-	if zl.includeStack && containsStack(err) {
-		field := zap.String("stack", fmt.Sprintf("%+v", err))
+	stackString, stackExists := stackString(err)
+	if zl.includeStack && stackExists {
+		field := zap.String("stack", fmt.Sprintf("%s", stackString))
 		fields = append(fields, field)
 	}
+
 	zapInstance(zl.debugMode).Error(err.Error(), fields...)
 }
 

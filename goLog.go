@@ -39,8 +39,9 @@ func (golog goLog) Error(err error) {
 	msg := err.Error()
 	msg = appendContexts(msg, golog.contexts)
 	msg = prependLevel("ERROR", msg)
-	if golog.includeStack && containsStack(err) {
-		msg = fmt.Sprintf("%s, stack=%+v", msg, err)
+	stackString, stackExists := stackString(err)
+	if golog.includeStack && stackExists {
+		msg = fmt.Sprintf("%s, stack=%s", msg, stackString)
 	}
 	log.Println(msg)
 }

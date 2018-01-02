@@ -2,6 +2,7 @@ package dalog
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
 	"os"
 	"strings"
 )
@@ -62,8 +63,16 @@ func WithContext(contexts ...Context) Log {
 	return logger
 }
 
-// containsStack returns if the error contains a stack
-func containsStack(err error) bool {
-	// hardly ideal, no better ideas...
-	return strings.Contains(fmt.Sprintf("%+v", err), "\n\t")
+type stackTracer interface {
+	StackTrace() errors.StackTrace
+}
+
+func stackString(err error) (string, bool) {
+	cause, ok := errors.Cause(err).(stackTracer)
+	if !ok {
+		return "", ok
+	}
+	st := cause.StackTrace()
+	return fmt.Sprintf("%+v", st[:]), ok
+
 }
