@@ -6,8 +6,9 @@ import (
 )
 
 type goLog struct {
-	contexts  []Context
-	debugMode bool
+	contexts     []Context
+	debugMode    bool
+	includeStack bool
 }
 
 func (golog goLog) Debug(a ...interface{}) {
@@ -34,10 +35,14 @@ func (golog goLog) Warn(a ...interface{}) {
 	log.Println(msg)
 }
 
-func (golog goLog) Error(a ...interface{}) {
-	msg := fmt.Sprint(a...)
+func (golog goLog) Error(err error) {
+	msg := err.Error()
 	msg = appendContexts(msg, golog.contexts)
 	msg = prependLevel("ERROR", msg)
+	stackString, stackExists := stackString(err)
+	if golog.includeStack && stackExists {
+		msg = fmt.Sprintf("%s, stack=%s", msg, stackString)
+	}
 	log.Println(msg)
 }
 

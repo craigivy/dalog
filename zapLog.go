@@ -16,7 +16,11 @@ func zapInstance(debugMode bool) *zap.Logger {
 		if debugMode {
 			cfg.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
 		}
-		logger, _ := cfg.Build(zap.AddCaller(), zap.AddCallerSkip(2))
+		cfg.Development = false
+		cfg.DisableCaller = true
+		cfg.DisableStacktrace = true
+		logger, _ := cfg.Build()
+		//		logger, _ := cfg.Build(zap.AddCaller(), zap.AddCallerSkip(2))
 
 		//		logger, _ := zap.NewProduction(zap.AddCaller(), zap.AddCallerSkip(2))
 		defer logger.Sync()
@@ -27,8 +31,9 @@ func zapInstance(debugMode bool) *zap.Logger {
 }
 
 type zapLog struct {
-	contexts  []Context
-	debugMode bool
+	contexts     []Context
+	debugMode    bool
+	includeStack bool
 }
 
 func (zl zapLog) Debug(a ...interface{}) {
@@ -49,9 +54,15 @@ func (zl zapLog) Warn(a ...interface{}) {
 	zapInstance(zl.debugMode).Warn(msg, convert(zl.contexts)...)
 }
 
-func (zl zapLog) Error(a ...interface{}) {
-	msg := fmt.Sprint(a...)
-	zapInstance(zl.debugMode).Error(msg, convert(zl.contexts)...)
+func (zl zapLog) Error(err error) {
+	fields := convert(zl.contexts)
+	stackString, stackExists := stackString(err)
+	if zl.includeStack && stackExists {
+		field := zap.String("stack", fmt.Sprintf("%s", stackString))
+		fields = append(fields, field)
+	}
+
+	zapInstance(zl.debugMode).Error(err.Error(), fields...)
 }
 
 func (zl zapLog) Debugf(format string, a ...interface{}) {
