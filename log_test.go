@@ -10,6 +10,13 @@ import (
 )
 
 func Test(t *testing.T) {
+	//os.Setenv("DALOG_LOGGER", "GO")
+	//os.Setenv("DALOG_STACK", "TRUE")
+
+	ens := goerr.New("add stack")
+	ens = errors.WithStack(ens)
+	dalog.NoContext().Error(ens)
+
 	os.Setenv("DALOG_LOGGER", "ZAP")
 	// os.Setenv("DALOG_DEBUG", "TRUE") // once set and a message is logged this can not be changed (for now)
 	dalog.WithContext(dalog.WithID("A123"), dalog.WithHostname()).Infof("%s %s", "hello", "world")
@@ -59,13 +66,18 @@ func TestStack(t *testing.T) {
 	os.Setenv("DALOG_STACK", "TRUE")
 
 	e := errors.New("This is an error using pkg error")
-	ens := goerr.New("no stack")
-	//fmt.Printf("error: %+v\n", c)
 	dalog.NoContext().Error(e)
+
+	ens := goerr.New("no stack")
 	dalog.NoContext().Error(ens)
+
+	// add a stack to the exiting error
+	esa := errors.WithStack(ens)
+	dalog.NoContext().Error(esa)
 
 	os.Setenv("DALOG_LOGGER", "GO")
 	dalog.NoContext().Error(e)
 	dalog.NoContext().Error(ens)
+	dalog.NoContext().Error(esa)
 
 }

@@ -68,10 +68,21 @@ type stackTracer interface {
 }
 
 func stackString(err error) (string, bool) {
+
+	str, ok := err.(stackTracer)
+	if ok {
+		st := str.StackTrace()
+		return stringify(st), ok
+	}
+
 	cause, ok := errors.Cause(err).(stackTracer)
 	if !ok {
 		return "", ok
 	}
 	st := cause.StackTrace()
 	return fmt.Sprintf("%+v", st[:]), ok
+}
+
+func stringify(stackTrace errors.StackTrace) string {
+	return fmt.Sprintf("%+v", stackTrace[:])
 }
