@@ -59,14 +59,14 @@ func (golog goLog) Debugf(format string, a ...interface{}) {
 func (golog goLog) Infof(format string, a ...interface{}) {
 	msg := fmt.Sprintf(format, a...)
 	msg = appendContexts(msg, golog.contexts)
-	msg = prependLevel("INFO", msg)
+	msg = prependLevel("INFO ", msg)
 	log.Println(msg)
 }
 
 func (golog goLog) Warnf(format string, a ...interface{}) {
 	msg := fmt.Sprintf(format, a...)
 	msg = appendContexts(msg, golog.contexts)
-	msg = prependLevel("WARN", msg)
+	msg = prependLevel("WARN ", msg)
 	log.Println(msg)
 }
 
