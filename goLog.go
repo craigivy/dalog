@@ -16,8 +16,25 @@ func (golog goLog) Debug(a ...interface{}) {
 		return
 	}
 	msg := fmt.Sprint(a...)
-	msg = appendContexts(msg, golog.contexts)
+	golog.debug(msg)
+}
+
+func (golog goLog) Debugf(format string, a ...interface{}) {
+	if !golog.debugMode {
+		return
+	}
+	msg := fmt.Sprintf(format, a...)
+	golog.debug(msg)
+}
+
+func (golog goLog) debug(msg string) {
+	debugContext, exists := getDebugContext(golog.contexts)
+	if exists {
+		fmtContext := fmt.Sprintf("[%s]", debugContext)
+		msg = prepend(fmtContext, msg)
+	}
 	msg = prependLevel("DEBUG", msg)
+	msg = appendContexts(msg, golog.contexts)
 	log.Println(msg)
 }
 
@@ -43,16 +60,6 @@ func (golog goLog) Error(err error) {
 	if golog.includeStack && stackExists {
 		msg = fmt.Sprintf("%s, stack=%s", msg, stackString)
 	}
-	log.Println(msg)
-}
-
-func (golog goLog) Debugf(format string, a ...interface{}) {
-	if !golog.debugMode {
-		return
-	}
-	msg := fmt.Sprintf(format, a...)
-	msg = appendContexts(msg, golog.contexts)
-	msg = prependLevel("DEBUG", msg)
 	log.Println(msg)
 }
 
@@ -86,11 +93,26 @@ func (golog goLog) WithContext(contexts ...Context) Log {
 
 func appendContexts(msg string, contexts []Context) string {
 	for _, context := range contexts {
-		msg = fmt.Sprintf("%s, %s=%s", msg, context.Key, context.Value)
+		if context.Key != debugContext {
+			msg = fmt.Sprintf("%s, %s=%s", msg, context.Key, context.Value)
+		}
 	}
 	return msg
 }
 
+func getDebugContext(contexts []Context) (context string, exists bool) {
+	for _, context := range contexts {
+		if context.Key == debugContext {
+			return context.Value, true
+		}
+	}
+	return "", false
+}
+
 func prependLevel(level string, msg string) string {
 	return fmt.Sprintf("%s %s", level, msg)
+}
+
+func prepend(prepend string, msg string) string {
+	return fmt.Sprintf("%s %s", prepend, msg)
 }

@@ -81,3 +81,20 @@ func TestStack(t *testing.T) {
 	dalog.NoContext().Error(esa)
 
 }
+
+func TestDebugContext(t *testing.T) {
+	os.Setenv("DALOG_LOGGER", "ZAP")
+	os.Setenv("DALOG_STACK", "TRUE")
+	log := dalog.WithContext(dalog.WithDebugContext("component1"))
+	log.Debugf("debug message with debug context")
+	log.Debug("debug message with debug context")
+	log.Warn("should not inlude debug context")
+
+	os.Setenv("DALOG_LOGGER", "GO")
+
+	log = dalog.WithContext(dalog.WithDebugContext("component1"))
+	log.Debugf("debug message with debug context")
+	log.Debug("debug message with debug context")
+	log.Warn("should not inlude debug context")
+
+}
