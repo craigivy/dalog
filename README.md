@@ -1,5 +1,11 @@
 # dalog
 Logger abstraction allowing JSON via Zap logger and string via Go's logger.  Also supports a key value context.
+Features
+* Both JSON and column std output logger
+* Context based loggers
+* Support for [pkg errors](https://github.com/pkg/errors) stack traces
+* DebugContext allows debug out put to be related and annotated
+* Environment variable for configuration
 
 ## Options
 * DALOG_LOGGER=[ZAP|GO] - Define which logger to use

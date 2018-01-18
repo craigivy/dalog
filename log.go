@@ -13,6 +13,10 @@ type Context struct {
 	Value string
 }
 
+const (
+	debugContext = "debugContext"
+)
+
 // WithID creates an ID context
 func WithID(id string) Context {
 	return Context{Key: "ID", Value: id}
@@ -24,6 +28,11 @@ func WithHostname() Context {
 		return Context{Key: "Hostname", Value: name}
 	}
 	return Context{}
+}
+
+// WithDebugContext is a specialized context to allow debug lines to be related and annotated
+func WithDebugContext(context string) Context {
+	return Context{debugContext, context}
 }
 
 // Log is the logger
@@ -59,7 +68,7 @@ func NoContext() Log {
 // WithContext creates a logger with a context
 func WithContext(contexts ...Context) Log {
 	logger := NoContext()
-	logger.WithContext(contexts...)
+	logger = logger.WithContext(contexts...)
 	return logger
 }
 
