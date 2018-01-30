@@ -17,6 +17,14 @@ const (
 	debugContext = "debugContext"
 )
 
+// WithKey creates a new context with the provided key and value
+func WithKey(key, value string) Context {
+	return Context{
+		Key:   key,
+		Value: value,
+	}
+}
+
 // WithID creates an ID context
 func WithID(id string) Context {
 	return Context{Key: "ID", Value: id}

@@ -53,10 +53,10 @@ func TestSubLoggers(t *testing.T) {
 	log.Error(errors.New("just an error without context"))
 	log.Debug("just a debug statement without context")
 
-	log2 := log.WithContext(dalog.Context{Key: "hello", Value: "world"})
+	log2 := log.WithContext(dalog.WithKey("hello", "world"))
 	log2.Info("we have context now!")
 
-	log3 := log2.WithContext(dalog.Context{Key: "foo", Value: "bar"})
+	log3 := log2.WithContext(dalog.WithKey("foo", "bar"))
 	log3.Info("even more context!")
 	log2.Info("but still keeps a separate context in this other logger")
 }
