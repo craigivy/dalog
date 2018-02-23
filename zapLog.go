@@ -86,6 +86,20 @@ func (zl zapLog) Error(err error) {
 	zapInstance(zl.debugMode).Error(err.Error(), fields...)
 }
 
+func (zl zapLog) Stackf(format string, a ...interface{}) {
+	if !zl.debugMode {
+		return
+	}
+	msg := fmt.Sprintf(format, a...)
+
+	stack := callers()
+	fields := convert(zl.contexts)
+	field := zap.String("stack", fmt.Sprintf("%+v", stack))
+	fields = append(fields, field)
+
+	zapInstance(zl.debugMode).Debug(msg, fields...)
+}
+
 func (zl zapLog) Infof(format string, a ...interface{}) {
 	msg := fmt.Sprintf(format, a...)
 	zapInstance(zl.debugMode).Info(msg, convert(zl.contexts)...)

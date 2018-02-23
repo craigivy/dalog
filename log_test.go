@@ -27,6 +27,7 @@ func Test(t *testing.T) {
 	log.Infof("ok %s", "doka")
 	log.Warnf("take %v", 5)
 	log.Debugf("debug me %s", "in json")
+	log.Stackf("debug stack")
 
 	os.Setenv("DALOG_LOGGER", "GO")
 	os.Setenv("DALOG_DEBUG", "TRUE")
@@ -38,6 +39,7 @@ func Test(t *testing.T) {
 	log.Infof("ok %s", "doka")
 	log.Error(errors.Errorf("take %v", 5))
 	log.Debugf("debug me %s", "now!")
+	log.Stackf("debug stack")
 
 	os.Setenv("DALOG_DEBUG", "FALSE")
 	log = dalog.WithContext()

@@ -52,6 +52,8 @@ type Log interface {
 	Infof(format string, a ...interface{})
 	Warnf(format string, a ...interface{})
 	Debugf(format string, a ...interface{})
+	// logs the current stack and message at the DEBUG level
+	Stackf(format string, a ...interface{})
 	WithContext(contexts ...Context) Log
 }
 

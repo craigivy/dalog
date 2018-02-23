@@ -9,7 +9,7 @@ Features
 
 ## Options
 * DALOG_LOGGER=[ZAP|GO] - Define which logger to use
-* DALOG_DEBUG=[TRUE|FALSE] - include debug log statements
+* DALOG_DEBUG=[TRUE|FALSE] - include debug and stack log statements
 * DALOG_STACK=[TRUE|FALSE] - include stack traces in the error log statements
 
 ## See it in action

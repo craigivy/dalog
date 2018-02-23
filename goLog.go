@@ -63,6 +63,27 @@ func (golog goLog) Error(err error) {
 	log.Println(msg)
 }
 
+func (golog goLog) Stackf(format string, a ...interface{}) {
+	if !golog.debugMode {
+		return
+	}
+	msg := fmt.Sprintf(format, a...)
+
+	debugContext, exists := getDebugContext(golog.contexts)
+	if exists {
+		fmtContext := fmt.Sprintf("[%s]", debugContext)
+		msg = prepend(fmtContext, msg)
+	}
+	msg = prependLevel("DEBUG", msg)
+
+	stack := callers()
+	msg = fmt.Sprintf("%s, stack=%+v", msg, stack)
+	msg = appendContexts(msg, golog.contexts)
+
+	log.Println(msg)
+
+}
+
 func (golog goLog) Infof(format string, a ...interface{}) {
 	msg := fmt.Sprintf(format, a...)
 	msg = appendContexts(msg, golog.contexts)
