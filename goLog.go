@@ -41,14 +41,14 @@ func (golog goLog) debug(msg string) {
 func (golog goLog) Info(a ...interface{}) {
 	msg := fmt.Sprint(a...)
 	msg = appendContexts(msg, golog.contexts)
-	msg = prependLevel("INFO", msg)
+	msg = prependLevel("INFO ", msg)
 	log.Println(msg)
 }
 
 func (golog goLog) Warn(a ...interface{}) {
 	msg := fmt.Sprint(a...)
 	msg = appendContexts(msg, golog.contexts)
-	msg = prependLevel("WARN", msg)
+	msg = prependLevel("WARN ", msg)
 	log.Println(msg)
 }
 
