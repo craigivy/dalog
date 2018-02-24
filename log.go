@@ -105,3 +105,20 @@ func stackString(err error) (string, bool) {
 func stringify(stackTrace errors.StackTrace) string {
 	return fmt.Sprintf("%+v", stackTrace[:])
 }
+
+func mergeContexts(dedup []Context, keep ...Context) []Context {
+
+	for _, cDedup := range dedup {
+		exists := false
+		for _, cKeep := range keep {
+			if cKeep.Key == cDedup.Key {
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			keep = append(keep, cDedup)
+		}
+	}
+	return keep
+}

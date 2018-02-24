@@ -127,7 +127,7 @@ func (zl zapLog) WithContext(contexts ...Context) Log {
 			break
 		}
 	}
-	zl.contexts = append(zl.contexts, contexts...)
+	zl.contexts = mergeContexts(zl.contexts, contexts...)
 	return zl
 }
 

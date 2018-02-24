@@ -99,4 +99,9 @@ func TestDebugContext(t *testing.T) {
 	log.Debug("debug message with debug context")
 	log.Warn("should not inlude debug context")
 
+	slog := log.WithContext(dalog.WithDebugContext("component2"))
+	slog.Debugf("debug message with component2 debug context")
+
+	log.Debugf("debug message still has component1 debug context")
+
 }

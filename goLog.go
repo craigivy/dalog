@@ -108,7 +108,7 @@ func (golog goLog) Errorf(format string, a ...interface{}) {
 // Return a new logger with the combined contexts of the old logger and the
 // provided contexts.
 func (golog goLog) WithContext(contexts ...Context) Log {
-	golog.contexts = append(golog.contexts, contexts...)
+	golog.contexts = mergeContexts(golog.contexts, contexts...)
 	return golog
 }
 
